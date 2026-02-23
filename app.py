@@ -54,13 +54,15 @@ class GenerateRequest(BaseModel):
 def index():
     return FileResponse("index.html")
 
+def check_for_distress(text: str) -> bool:
+    distress_pattern = re.compile(r"\b(hurt|kill|die|abuse|emergency)\b", re.IGNORECASE)
+    return bool(distress_pattern.search(text))
+
 @app.post("/generate")
 def generate(request: GenerateRequest):
     # --- PYTHON BACKSTOP (Safety / Fallback Requirement) ---
-    # Detect distressed keywords in the user's prompt using regex
-    distress_pattern = re.compile(r"\b(hurt|kill|die|abuse|emergency)\b", re.IGNORECASE)
-    
-    if distress_pattern.search(request.prompt):
+    # Detect distressed keywords in the user's prompt using regex    
+    if check_for_distress(request.prompt):
         # Fallback behavior: Do not send to LLM, return hardcoded safety response
         return {
             "text": "Safety alert: It sounds like there might be an emergency or distress situation. If this is a medical emergency for your dog, please contact an emergency veterinarian immediately."
@@ -76,7 +78,17 @@ def generate(request: GenerateRequest):
             temperature=0.2 # Keep it low for consistent persona behavior
         )
     )
-    
+    # Validate that the response adheres to the persona and constraints (optional but good for safety)
+    lowercase_text = response.text.lower()
+    if check_for_distress(lowercase_text):
+        return {
+            "text": "Safety alert: The response seems to contain distressing content. If this is a medical emergency for your dog, please contact an emergency veterinarian immediately."
+        }
+    if "collie" not in lowercase_text:
+        return {
+            "text": "It seems like the response may have veered off-topic. Let's refocus on Border Collies! What else would you like to know about them?"
+        }
+
     return {
         "text": "AKC Border Collie Club member: " + response.text,
     }

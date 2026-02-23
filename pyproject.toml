@@ -1,10 +1,12 @@
 [project]
-name = "gemini-structured-output"
+name = "border-collie-expert-chatbot"
 version = "0.1.0"
-description = "D&D weapon generator using Gemini structured output with a Pydantic schema"
+description = "Domain-specific Q&A chatbot acting as an AKC Border Collie Club member, using the Gemini API."
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.109.0",
     "uvicorn>=0.27.0",
     "google-genai>=1.0.0",
+    "pydantic>=2.0.0",
+    "requests>=2.31.0"
 ]

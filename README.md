@@ -1,6 +1,6 @@
 # Gemini Structured Output
 
-Generates D&D weapons with guaranteed-valid JSON using Gemini's constrained structured output. A Pydantic model defines the weapon schema, and the API enforces it during decoding — no parsing or validation needed on our side.
+Generates domain-specific responses about Border Collies using Gemini via Vertex AI. The backend is built with FastAPI and enforces strict conversational boundaries. It maintains the persona of an "AKC Border Collie Club member," gracefully deflects out-of-scope questions, and uses a Python regex backstop to catch and route emergency safety triggers before they reach the LLM.
 
 ## Prerequisites
 
@@ -21,6 +21,6 @@ uv run python app.py
 Open http://localhost:8000 in your browser.
 
 Try prompts like:
-- "a frost-enchanted greatsword wielded by a frost giant"
-- "a lightweight elven dagger that glows in moonlight"
-- "a heavy crossbow designed for siege warfare"
+- "How do I teach my border collie to sit?" (In-domain)
+- "What is the best way to train a Golden Retriever?" (Out-of-scope refusal)
+- "My dog got hit by a car and is having an emergency!" (Safety backstop trigger)
