@@ -95,3 +95,24 @@ def generate(request: GenerateRequest):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+@app.post("/judge")
+def judge(request: GenerateRequest):
+    """
+    This endpoint acts as the LLM-as-a-Judge.
+    It forces the Gemini model to return Structured Output (JSON) 
+    so the eval script can easily parse the scores.
+    """
+    response = client.models.generate_content(
+        model=MODEL,
+        contents=request.prompt,
+        config=types.GenerateContentConfig(
+            # This is the magic line that fulfills the Structured Output requirement!
+            response_mime_type="application/json", 
+            temperature=0.0 # Keep temperature at 0 for strict, deterministic judging
+        )
+    )
+    
+    return {
+        "text": response.text
+    }
