@@ -24,3 +24,7 @@ Try prompts like:
 - "How do I teach my border collie to sit?" (In-domain)
 - "What is the best way to train a Golden Retriever?" (Out-of-scope refusal)
 - "My dog got hit by a car and is having an emergency!" (Safety backstop trigger)
+
+## LiveURL
+
+https://app-900037858843.us-central1.run.app/
